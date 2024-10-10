@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import './App.css'
+import './App.css'
 
 
 const products = [
@@ -61,7 +61,7 @@ const ProductBox = ({name, product, checkoutForm, updateCart, ...rest}) => {
       
       var currentProduct = products.find((x) => { return x.id == productId });
       var currentQty = document.getElementById('qty' + productId).value == '' || document.getElementById('qty' + productId).value == null ? 1 : document.getElementById('qty' + productId).value;
-      cartExistIndex = checkoutForm.cart_details.findIndex((x) => { return x.id == productId });
+      var cartExistIndex = checkoutForm.cart_details.findIndex((x) => { return x.id == productId });
 
       var isDecimal = currentQty != Math.trunc(currentQty);
 
@@ -79,7 +79,7 @@ const ProductBox = ({name, product, checkoutForm, updateCart, ...rest}) => {
               ...currentProduct,
               quantity: parseInt(currentQty),
               totalAmount: function(){
-                  actualPrice = this.price > this.discounted_price ? this.discounted_price : this.price;
+                  var actualPrice = this.price > this.discounted_price ? this.discounted_price : this.price;
                   return actualPrice * this.quantity
               }
           }
@@ -90,7 +90,7 @@ const ProductBox = ({name, product, checkoutForm, updateCart, ...rest}) => {
   }
   
   return(
-      <div className='grid-item bg-lightgrey-300 rounded-lg p-5'>
+      <div className=' grid-item bg-lightgrey-300 rounded-lg p-5'>
           <h1>{ name }</h1>
           <p>{product.description}</p>
           <PriceBox price={product.price} discounted_price={product.discounted_price} />
@@ -168,14 +168,14 @@ const CartBox = ({x, cart, updateCart}) => {
   
   return(
       <div className="box bg-white rounded">
-          <div className="pl-2.5 pr-2.5 flex justify-between items-center">
+          <div className="cartItemBox pl-2.5 pr-2.5 flex justify-between items-center">
               <p>{ x.name }</p>
               <PriceBox price={x.price} discounted_price={x.discounted_price} />
               <div className="flex items-center">
                   <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {editQty(x.id, 1)}}>
                       <span className="text-3xl leading-none">+</span>
                   </button>
-                  <p className="inline mx-2 text-xl leading-none">{x.quantity}</p>
+                  <span className="inline mx-2 text-xl leading-none">{x.quantity}</span>
                   <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {editQty(x.id, -1)}}>
                       <span className="text-3xl leading-none">-</span>
                   </button>
