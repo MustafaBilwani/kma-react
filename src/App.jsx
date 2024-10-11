@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './App.css'
+import { Box, Flex, Button, ChakraProvider, Input, Text, FormLabel, Textarea, Select } from '@chakra-ui/react'
 
 
 const products = [
@@ -43,14 +43,14 @@ const products = [
 const PriceBox = ({price, discounted_price}) => {
   if (price > discounted_price){
       return(
-          <div className='actual-price text-green'>
-              <span className='discount-price line-through text-red'>{price}</span>
-              {discounted_price}
-          </div>
+          <Box color='green'>
+              <Box as='span' textDecoration='line-through' color='red'>{price}</Box>
+              <span> {discounted_price}</span>
+          </Box>
       )
   }
   return(
-      <div className='actual-price text-green'>{price}</div>
+      <Box color='green'>{price}</Box>
   )
 }
 
@@ -90,15 +90,15 @@ const ProductBox = ({name, product, checkoutForm, updateCart, ...rest}) => {
   }
   
   return(
-      <div className=' grid-item bg-lightgrey-300 rounded-lg p-5'>
+      <Box p='5' borderRadius={5} bg='gray.200' boxShadow={'xl'}>
           <h1>{ name }</h1>
           <p>{product.description}</p>
           <PriceBox price={product.price} discounted_price={product.discounted_price} />
-          <div className='addToCartBox'>
-              <input className="h-6 rounded bg-lightgrey-100 pl-1 mb-1" type='number' id={"qty" + product.id}/>
-              <button className=" border border-grey-900 px-1 rounded"  onClick={() => {addToCart(product.id)}}>Add to Cart</button>
-          </div>
-      </div>
+          <Box verticalAlign='center' className='addToCartBox'>
+              <Input h='7' w='100px' bg='gray.50' type='number' id={"qty" + product.id}/>
+              <Button h='7' mb='1' colorScheme='gray' onClick={() => {addToCart(product.id)}}>Add to Cart</Button>
+          </Box>
+      </Box>
   )
 }
 
@@ -127,9 +127,9 @@ const TotalAmountBox = ({cart}) => {
       if (totalPrice == 0) {return(<></>)}
       
       return(
-          <div className="bg-white rounded" id="totalAmountBox">
-              <p className="ml-2">Total: {totalPrice}</p> 
-          </div>
+          <Box mt='2' p='1' pl='3' h='8' bg='white' borderRadius='5' className="bg-white rounded">
+              Total: {totalPrice} 
+          </Box>
       )
 
 }
@@ -140,7 +140,7 @@ const CountAdd = () => {
   return(
       <div>
           You clicked {count} times <br/>
-          <button onClick={()=>{setCount(count + 1)}}>Click</button>
+          <Button colorScheme='blackAlpha' h={6} onClick={()=>{setCount(count + 1)}}>Click</Button>
       </div>
   )
 }
@@ -167,36 +167,34 @@ const CartBox = ({x, cart, updateCart}) => {
   }
   
   return(
-      <div className="box bg-white rounded">
-          <div className="cartItemBox pl-2.5 pr-2.5 flex justify-between items-center">
-              <p>{ x.name }</p>
-              <PriceBox price={x.price} discounted_price={x.discounted_price} />
-              <div className="flex items-center">
-                  <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {editQty(x.id, 1)}}>
-                      <span className="text-3xl leading-none">+</span>
-                  </button>
-                  <span className="inline mx-2 text-xl leading-none">{x.quantity}</span>
-                  <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {editQty(x.id, -1)}}>
-                      <span className="text-3xl leading-none">-</span>
-                  </button>
-              </div>
-              <div>
-                  {x.totalAmount()}
-              </div>
-              <div>
-                  <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {removeItemCart(x.id)}}>
-                      <span className="text-xl leading-none text-red">X</span>
-                  </button>
-              </div>
-          </div>
-      </div>
+      <Box  display='flex' pl='2.5' pr='2.5' alignItems='center' justifyContent='space-between' bg={'gray.50'} borderRadius={5} h={10}>         
+        <p>{ x.name }</p>
+        <PriceBox price={x.price} discounted_price={x.discounted_price} />
+        <Box pb='2' alignItems='center' className="flex items-center">
+          <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {editQty(x.id, 1)}}>
+            <Text fontSize='28px' fontWeight='bold'>+</Text>
+          </button>
+          <Text display='inline' fontSize='20px' className="inline mx-2 text-xl leading-none">{x.quantity}</Text>
+          <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {editQty(x.id, -1)}}>
+            <Text fontSize='32px' fontWeight='bold' className="text-3xl leading-none">-</Text>
+          </button>
+        </Box>
+        <div>
+          {x.totalAmount()}
+        </div>
+        <div>
+          <button className="h-8 mb-1.5 w-8 flex items-center justify-center" onClick={() => {removeItemCart(x.id)}}>
+            <Text color='red' fontSize='22px' fontWeight='bold' className="text-xl leading-none text-red">X</Text>
+          </button>
+        </div>    
+      </Box>
   )
 }
 
 const CartList= ({cart, updateCart}) => {
   
   return(
-      <div id="boxList" className="grid-item slideDown flex flex-col gap-1 mt-1">        
+      <Box id="boxList" display={'flex'} flexDirection={'column'} gap={1} mt={1}>
           {
               cart.map((cartDetail) => {
                   
@@ -205,7 +203,7 @@ const CartList= ({cart, updateCart}) => {
                   )
               })
           }
-      </div>
+      </Box>
   )
 }
 
@@ -314,77 +312,67 @@ const App = () => {
   return(
 
     <>
-    <div id="header" className='slideDown bg-grey-100 text-grey-900 h-20 max-h-20 min-h-20 flex items-center pl-5'>
-      <h1 className="text-5xl"> { message } </h1> <br/>
-      <button onClick={() => {setMessage('changed')}}>Change Message</button>
-    </div>
-    <CountAdd/>
-    <div id="container" className="flex flex-1">
-      <div id="sidebar" className="bg-lightgrey-400 text-grey-900 w-60 p-5 box-border ">
-        <h1>Testing</h1>
-      </div>
-      <div id='mainBox' className="flex w-full gap-2.5 m-4">
-        <div className="grid-item slideDown p-5 bg-lightgrey-300" style={{width: "35%"}}>
-          <form id="ecommerceForm"  className="flex flex-col gap-1">
-            <label className="text-xl">Checkout Form</label>
-            <input className="h-7 rounded bg-lightgrey-100 pl-2" type='text' name='first_name' required
-              id='first_name' placeholder="Enter you first_name" />
-            <span className="text-red" hidden id='taskErrorField-first_name'>This field is required</span>
-            <input className="h-7 rounded bg-lightgrey-100 pl-2" type='text' name='last_name' required
-              id='last_name' placeholder="Enter you last_name" />
-            <span className="text-red" hidden id='taskErrorField-last_name'>This field is required</span>
-            <input className="h-7 rounded bg-lightgrey-100 pl-2" type='tel' name='number' required id='number'
-              placeholder="Enter you phone_number" />
-            <span className="text-red" hidden id='taskErrorField-number'>This field is required</span>
-            <textarea className="h-7 rounded bg-lightgrey-100 pl-2" id="address" name="address"
-              placeholder="enter your full address"></textarea>
-            <span className="text-red" hidden id='taskErrorField-address'>This field is required</span>
-            <input className="h-7 rounded bg-lightgrey-100 pl-2" type='text' name='email' required id='email'
-              placeholder="Enter you email" />
-            <span className="text-red" hidden id='taskErrorField-email'>This field is required</span>
-            <input className="h-7 rounded bg-lightgrey-100 pl-2" type='text' name='postal_code' required
-              id='postal_code' placeholder="Enter you postal_code" />
-            <span className="text-red" hidden id='taskErrorField-postal_code'>This field is required</span>
-            <select className="h-7 rounded bg-lightgrey-100 pl-2" id="city" name="city" defaultValue="Karachi">
+    <ChakraProvider>
+    <Box id='header' fontSize='30px' bg='gray.200' display='flex' alignItems='center' h='20' color='black' pl='5' gap={2}  fontWeight={'bold'}>
+      <h1> { message } </h1> <br/>
+      <Button colorScheme='blackAlpha' onClick={() => {setMessage('changed')}}>Change Message</Button>
+    </Box>
+    <Box id='container' bg={'gray.100'} display='flex' h='98%' fontWeight={'extrabold'}>
+      <Box id="sidebar" bg={'gray.300'} textColor={'gray.800'} w={60} p={5}>
+        <CountAdd/>
+      </Box>
+      <Box id='mainBox' display={'flex'} w='100%' gap={2.5} p={4}>
+        <Box w={'35%'} bg={'gray.300'} p='5'>
+          <form id="ecommerceForm"  style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
+            <FormLabel fontSize={'24px'} fontWeight={'extrabold'}>Checkout Form</FormLabel>
+            <Input h='7' borderRadius='5' bg='gray.50' pl='2'type='text' name='first_name' required id='first_name' placeholder="Enter you first name" />
+            <Text color='red' hidden id='taskErrorField-first_name'>This field is required</Text>
+            <Input h='7' borderRadius='5' bg='gray.50' pl='2' type='text' name='last_name' required id='last_name' placeholder="Enter you last name" />
+            <Text color='red' hidden id='taskErrorField-last_name'>This field is required</Text>
+            <Input h='7' borderRadius='5' bg='gray.50' pl='2' type='tel' name='number' required id='number' placeholder="Enter you phone number" />
+            <Text color='red' hidden id='taskErrorField-number'>This field is required</Text>
+            <Textarea height="28px" minHeight='28px' pt='0' pb='0' borderRadius='5' bg='gray.50' pl='2' id="address" name="address" placeholder="Enter your full address"></Textarea>
+            <Text color='red' hidden id='taskErrorField-address'>This field is required</Text>
+            <Input h='7' borderRadius='5' bg='gray.50' pl='2' type='text' name='email' required id='email' placeholder="Enter you email" />
+            <Text color='red' hidden id='taskErrorField-email'>This field is required</Text>
+            <Input h='7' borderRadius='5' bg='gray.50' pl='2' type='text' name='postal_code' required id='postal_code' placeholder="Enter you postal code" />
+            <Text color='red' hidden id='taskErrorField-postal_code'>This field is required</Text>
+            <Select h='7' borderRadius='5' bg='gray.50' id="city" name="city" defaultValue="Karachi">
               <option>Karachi</option>
               <option>Lahore</option>
               <option>Islamabed</option>
               <option>Peshawar</option>
               <option>Queta</option>
-            </select>
-            <span className="text-red" hidden id='taskErrorField-city'>This field is required</span>
-            <select className="h-7 rounded bg-lightgrey-100 pl-2" id="country" name="country" defaultValue="Pakistan">
+            </Select>
+            <Text color='red' hidden id='taskErrorField-city'>This field is required</Text>
+            <Select h='7' borderRadius='5' bg='gray.50' className="h-7 rounded bg-lightgrey-100 pl-2" id="country" name="country" defaultValue="Pakistan">
               <option>Pakistan</option>
-            </select>
-            <span className="text-red" hidden id='taskErrorField-country'>This field is required</span>
+            </Select>
+            <Text color='red' hidden id='taskErrorField-country'>This field is required</Text>
             <div>
-              <label className="paymentLabel text-base flex items-center">
-                <input type='radio' name='task' required id='payment_method' defaultChecked={true}
-                  placeholder="Enter you payment_method" />
+              <FormLabel display={'flex'} alignItems={'center'} m='0' className="paymentLabel text-base flex items-center">
+                <input type='radio' name='task' required id='payment_method' defaultChecked={true} placeholder="Enter you payment_method" />
                 Cash on Delivery
-              </label>
-              <label className="paymentLabel text-base flex items-center">
-                <input type='radio' name='task' required id='payment_method'
-                  placeholder="Enter you payment_method" />
+              </FormLabel>
+              <FormLabel display={'flex'} alignItems={'center'} m={0} className="paymentLabel text-base flex items-center">
+                <input type='radio' name='task' required id='payment_method' placeholder="Enter you payment_method" />
                 Online Payment
-              </label>
+              </FormLabel>
             </div>
-            <button type='button' onClick={() => {sumbitCheckout()}} id='submitBtn'
-              className='hover:bg-grey-300 submitBtn bg-blue text-white p-2.5 rounded'>Checkout</button>
+            <Button type='button' colorScheme='blue' p='2.5' borderRadius={5} onClick={() => {sumbitCheckout()}} id='submitBtn'>Checkout</Button>
           </form>
-            <div>
-                <CartList cart={cart} updateCart={updateCart} />
-                <div id="totalAmountDiv" className="flex flex-col bg-lightgrey-500 rounded grid-item slideDown mt-2 justify-center">
-                  <TotalAmountBox cart={cart} />
-                </div>
-            </div>
-        </div>
+          <div>
+              <CartList cart={cart} updateCart={updateCart} />
+              <TotalAmountBox cart={cart} />
+          </div>
+        </Box>
 
-        <div id='main' className="flex-1 box-border p-5 gap-5 grid grid-cols-2	">
+        <Box id='main'  flex='1'  display='grid' p='5' gap={'5'} gridTemplateColumns='repeat(2, 1fr)'>
           <ProductList checkoutForm={checkoutForm} updateCart={() => {updateCart(cart)}} />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
+    </ChakraProvider>
     </>
   )
 }
